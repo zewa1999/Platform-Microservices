@@ -24,8 +24,34 @@ public class PlatformsController : ControllerBase
     {
         Console.WriteLine("Getting platforms...");
 
-        var platformItem = _repo.Get(orderBy: x => x.OrderBy(p => p.Name));
+        var platformItem = _repo.Get(orderBy: x => x.OrderBy(p => p.Id));
 
         return Ok(_mapper.Map<IEnumerable<PlatformReadDto>>(platformItem));
+    }
+
+    [HttpGet("{id}", Name = "GetPlatformById")]
+    public ActionResult<PlatformReadDto> GetPlatformById(int id)
+    {
+        Console.WriteLine("Getting platforms...");
+
+        var platformItem = _repo.Get(x => x.Id == id, orderBy: x => x.OrderBy(p => p.Name)).First();
+
+        if (platformItem != null)
+        {
+            return Ok(_mapper.Map<PlatformReadDto>(platformItem));
+        }
+
+        return NotFound();
+    }
+
+    [HttpPost]
+    public ActionResult<PlatformReadDto> CreatePlatform(PlatformCreateDto platformCreateDto)
+    {
+        var platformModel = _mapper.Map<Platform>(platformCreateDto);
+        _repo.Insert(platformModel);
+
+        var platformReadDto = _mapper.Map<PlatformReadDto>(platformModel);
+
+        return CreatedAtRoute(nameof(GetPlatformById), new { Id = platformReadDto.Id }, platformReadDto);
     }
 }
