@@ -8,6 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<AppDbContext>(opt =>
 opt.UseInMemoryDatabase("InMemoryDB"));
 builder.Services.AddScoped<IPlatformRepo<Platform>, PlatformRepo>();
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddControllers();
 
 // Add services to the container.
