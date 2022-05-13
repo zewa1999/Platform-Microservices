@@ -12,12 +12,29 @@ builder.Services.AddControllers();
 
 // Add services to the container.
 
+builder.Services.AddSwaggerGen();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 
+if (app.Environment.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage();
+    app.UseSwagger();
+    app.UseSwaggerUI(options =>
+    {
+        options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
+        options.RoutePrefix = string.Empty;
+    });
+}
 app.UseHttpsRedirection();
 
+app.UseRouting();
+
+app.UseAuthorization();
+
 app.MapControllers();
+
+PrepDb.PrepPopulation(app);
 
 app.Run();
