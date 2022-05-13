@@ -1,28 +1,28 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using PlatformService.Models;
 using System.Linq.Expressions;
 
 namespace PlatformService.Data.Repository;
 
-public class PlatformRepo<T> : IPlatformRepo<T>, IRepo<T>
-    where T : class
+public class PlatformRepo : IPlatformRepo<Platform>
 {
-
     private readonly AppDbContext _ctx;
 
     public PlatformRepo(AppDbContext context)
     {
         _ctx = context;
     }
-    public virtual IEnumerable<T> Get(
-            Expression<Func<T, bool>>? filter = null,
-            Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null,
+
+    public virtual IEnumerable<Platform> Get(
+            Expression<Func<Platform, bool>>? filter = null,
+            Func<IQueryable<Platform>, IOrderedQueryable<Platform>>? orderBy = null,
             string includeProperties = "")
     {
         try
         {
-            var databaseSet = _ctx.Set<T>();
+            var databaseSet = _ctx.Set<Platform>();
 
-            IQueryable<T> query = databaseSet;
+            IQueryable<Platform> query = databaseSet;
 
             if (filter != null)
             {
@@ -48,7 +48,7 @@ public class PlatformRepo<T> : IPlatformRepo<T>, IRepo<T>
             //this.Logger.Error(ex.Message + "The query will return an empty list!");
         }
 
-        return new List<T>();
+        return new List<Platform>();
     }
 
     /// <summary>
@@ -56,13 +56,13 @@ public class PlatformRepo<T> : IPlatformRepo<T>, IRepo<T>
     /// </summary>
     /// <param name="entity">The entity.</param>
     /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-    public virtual bool Insert(T? entity)
+    public virtual bool Insert(Platform? entity)
     {
         try
         {
             if (entity != null)
             {
-                var databaseSet = _ctx.Set<T>();
+                var databaseSet = _ctx.Set<Platform>();
                 databaseSet.Add(entity);
                 _ctx.SaveChanges();
             }
@@ -85,11 +85,11 @@ public class PlatformRepo<T> : IPlatformRepo<T>, IRepo<T>
     /// </summary>
     /// <param name="item">The item.</param>
     /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-    public virtual bool Update(T item)
+    public virtual bool Update(Platform item)
     {
         try
         {
-            var databaseSet = this._ctx.Set<T>();
+            var databaseSet = this._ctx.Set<Platform>();
             databaseSet.Attach(item);
             _ctx.Entry(item).State = EntityState.Modified;
 
