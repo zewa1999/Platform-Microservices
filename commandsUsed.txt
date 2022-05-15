@@ -1,0 +1,9 @@
+docker build -t andreicostache99/platformservice .        sa faca build
+docker run -p 8080:80 -d andreicostache99/platformservice 
+kubectl apply -f platforms-depl.yaml
+kubectl get deployments
+kubectl get pods
+kubectl delete deployment platforms-depl
+
+
+kubectl apply -f platforms-np-srv.yaml
